@@ -1,4 +1,9 @@
 import { defineConfig } from "@playwright/test";
+import dotenv from 'dotenv';
+dotenv.config();
+
+// 測試用 - 確認環境變數有載入
+console.log('DEEPSEEK_API_KEY 是否存在:', !!process.env.DEEPSEEK_API_KEY);
 
 export default defineConfig({
   timeout: 90000,

@@ -9,27 +9,49 @@ export const completeTask = async (
   page: Page,
   task: TaskMessage,
 ): Promise<TaskResult> => {
-
+  
   // 根據 provider 設定 API 配置
   const provider = task.options?.provider || 'openai';
-  let apiConfig: any = {
-    apiKey: task.options?.aiApiKey,
-    baseURL: task.options?.aiBaseUrl,
-    defaultQuery: task.options?.aiDefaultQuery,
-    defaultHeaders: task.options?.aiDefaultHeaders,
-  };
-
-  // 根據不同 provider 設定預設值
-  switch (provider) {
-    case 'deepseek':
-      apiConfig.baseURL = apiConfig.baseURL || 'https://api.deepseek.com';
-      break;
-    case 'openai':
-      // OpenAI 使用預設值即可
-      break;
-    // 未來可以加入其他 provider
+  
+  // 建立 API 配置
+  let apiConfig: any = {};
+  
+  // 處理 API Key
+  if (task.options?.aiApiKey) {
+    apiConfig.apiKey = task.options.aiApiKey;
+  } else {
+    // 根據 provider 尋找環境變數
+    switch (provider) {
+      case 'deepseek':
+        apiConfig.apiKey = process.env.DEEPSEEK_API_KEY;
+        break;
+      case 'openai':
+        apiConfig.apiKey = process.env.OPENAI_API_KEY;
+        break;
+      default:
+        apiConfig.apiKey = process.env.OPENAI_API_KEY;
+    }
   }
   
+  // 設定 base URL
+  if (task.options?.aiBaseUrl) {
+    apiConfig.baseURL = task.options.aiBaseUrl;
+  } else {
+    switch (provider) {
+      case 'deepseek':
+        apiConfig.baseURL = 'https://api.deepseek.com';
+        break;
+      // OpenAI 使用預設值
+    }
+  }
+  
+  // 其他選項
+  if (task.options?.aiDefaultQuery) {
+    apiConfig.defaultQuery = task.options.aiDefaultQuery;
+  }
+  if (task.options?.aiDefaultHeaders) {
+    apiConfig.defaultHeaders = task.options.aiDefaultHeaders;
+  }
 
   const openai = new OpenAI(apiConfig);
 
@@ -37,12 +59,15 @@ export const completeTask = async (
     null;
 
   const actions = createActions(page);
-
   const debug = task.options?.debug ?? defaultDebug;
+
+  // 根據 provider 選擇預設模型
+  const defaultModel = provider === 'deepseek' ? 'deepseek-chat' : 'gpt-4o';
+  const model = task.options?.model ?? defaultModel;
 
   const runner = openai.beta.chat.completions
     .runTools({
-      model: task.options?.model ?? "gpt-4o",
+      model,
       messages: [
         {
           role: "system",
