@@ -9,12 +9,29 @@ export const completeTask = async (
   page: Page,
   task: TaskMessage,
 ): Promise<TaskResult> => {
-  const openai = new OpenAI({
-    apiKey: task.options?.openaiApiKey,
-    baseURL: task.options?.openaiBaseUrl,
-    defaultQuery: task.options?.openaiDefaultQuery,
-    defaultHeaders: task.options?.openaiDefaultHeaders,
-  });
+
+  // 根據 provider 設定 API 配置
+  const provider = task.options?.provider || 'openai';
+  let apiConfig: any = {
+    apiKey: task.options?.aiApiKey,
+    baseURL: task.options?.aiBaseUrl,
+    defaultQuery: task.options?.aiDefaultQuery,
+    defaultHeaders: task.options?.aiDefaultHeaders,
+  };
+
+  // 根據不同 provider 設定預設值
+  switch (provider) {
+    case 'deepseek':
+      apiConfig.baseURL = apiConfig.baseURL || 'https://api.deepseek.com';
+      break;
+    case 'openai':
+      // OpenAI 使用預設值即可
+      break;
+    // 未來可以加入其他 provider
+  }
+  
+
+  const openai = new OpenAI(apiConfig);
 
   let lastFunctionResult: null | { errorMessage: string } | { query: string } =
     null;

@@ -42,6 +42,7 @@
     "@playwright/test": "1.52.0",
     "@types/node": "20.17.30",
     "@types/sanitize-html": "2.15.0",
+    "auto-playwright": "^1.16.1",
     "knip": "5.50.5",
     "prettier": "3.5.3",
     "semantic-release": "24.2.3",

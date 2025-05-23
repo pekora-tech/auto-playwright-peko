@@ -7,10 +7,11 @@ export type Test = TestType<any, any>;
 export type StepOptions = {
   debug?: boolean;
   model?: string;
-  openaiApiKey?: string;
-  openaiBaseUrl?: string;
-  openaiDefaultQuery?: {};
-  openaiDefaultHeaders?: {};
+  provider?: 'openai' | 'deepseek' | 'claude' | 'ollama';
+  aiApiKey?: string;
+  aiBaseUrl?: string;
+  aiDefaultQuery?: Record<string, any>;    
+  aiDefaultHeaders?: Record<string, string>; 
 };
 
 export type TaskMessage = {

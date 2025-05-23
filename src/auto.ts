@@ -58,10 +58,11 @@ async function runTask(
       ? {
           model: options.model ?? "gpt-4o",
           debug: options.debug ?? false,
-          openaiApiKey: options.openaiApiKey,
-          openaiBaseUrl: options.openaiBaseUrl,
-          openaiDefaultQuery: options.openaiDefaultQuery,
-          openaiDefaultHeaders: options.openaiDefaultHeaders,
+          provider: options.provider ?? 'openai',
+          aiApiKey: options.aiApiKey,
+          aiBaseUrl: options.aiBaseUrl,
+          aiDefaultQuery: options.aiDefaultQuery,
+          aiDefaultHeaders: options.aiDefaultHeaders,
         }
       : undefined,
   });
