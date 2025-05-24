@@ -1,4 +1,5 @@
 import OpenAI from "openai";
+// import { GoogleGenerativeAI } from "@google/generative-ai";
 import { type Page, TaskMessage, TaskResult } from "./types";
 import { prompt, SYSTEM_PROMPT } from "./prompt";
 import { createActions } from "./createActions";
@@ -12,7 +13,39 @@ export const completeTask = async (
   
   // 根據 provider 設定 API 配置
   const provider = task.options?.provider || 'openai';
+  // const debug = task.options?.debug ?? defaultDebug;
   
+  // // Type Gemini =====
+  // // 如果是 Gemini，使用完全不同的流程
+  // if (provider === 'gemini') {
+  //   const apiKey = task.options?.aiApiKey || process.env.GEMINI_API_KEY;
+  //   if (!apiKey) throw new Error('Gemini API key required');
+    
+  //   const genAI = new GoogleGenerativeAI(apiKey);
+  //   const model = genAI.getGenerativeModel({ 
+  //     model: task.options?.model || "gemini-pro" 
+  //   });
+    
+  //   // 直接發送請求，不使用 function calling
+  //   const result = await model.generateContent(
+  //     SYSTEM_PROMPT + "\n\n" + prompt(task)
+  //   );
+    
+  //   const response = await result.response;
+  //   const text = response.text();
+    
+  //   // 簡單解析回應（這裡需要根據實際回應格式調整）
+  //   if (text.includes("ASSERTION:")) {
+  //     return { assertion: text.includes("TRUE") };
+  //   } else if (text.includes("QUERY:")) {
+  //     // return { query: text.split("QUERY:")[1].trim() };
+  //   } else {
+  //     return { errorMessage: "Cannot complete task" };
+  //   }
+  // }
+
+
+  // Type OpenAI || DeepSeek =====
   // 建立 API 配置
   let apiConfig: any = {};
   

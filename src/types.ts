@@ -7,7 +7,7 @@ export type Test = TestType<any, any>;
 export type StepOptions = {
   debug?: boolean;
   model?: string;
-  provider?: 'openai' | 'deepseek' | 'claude' | 'ollama';
+  provider?: 'openai' | 'deepseek' | 'claude' | 'ollama' | 'gemini';
   aiApiKey?: string;
   aiBaseUrl?: string;
   aiDefaultQuery?: Record<string, any>;    
