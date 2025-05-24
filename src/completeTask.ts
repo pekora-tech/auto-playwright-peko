@@ -9,13 +9,13 @@ export const completeTask = async (
   page: Page,
   task: TaskMessage,
 ): Promise<TaskResult> => {
-  
+
   // 根據 provider 設定 API 配置
   const provider = task.options?.provider || 'openai';
-  
+
   // 建立 API 配置
   let apiConfig: any = {};
-  
+
   // 處理 API Key
   if (task.options?.aiApiKey) {
     apiConfig.apiKey = task.options.aiApiKey;
@@ -28,11 +28,15 @@ export const completeTask = async (
       case 'openai':
         apiConfig.apiKey = process.env.OPENAI_API_KEY;
         break;
+      case 'ollama':
+        apiConfig.apiKey = 'ollama'; // Ollama 不需要真的 key
+        apiConfig.baseURL = task.options?.aiBaseUrl || 'http://localhost:11434/v1';
+        break;
       default:
         apiConfig.apiKey = process.env.OPENAI_API_KEY;
     }
   }
-  
+
   // 設定 base URL
   if (task.options?.aiBaseUrl) {
     apiConfig.baseURL = task.options.aiBaseUrl;
@@ -44,7 +48,7 @@ export const completeTask = async (
       // OpenAI 使用預設值
     }
   }
-  
+
   // 其他選項
   if (task.options?.aiDefaultQuery) {
     apiConfig.defaultQuery = task.options.aiDefaultQuery;
@@ -62,7 +66,7 @@ export const completeTask = async (
   const debug = task.options?.debug ?? defaultDebug;
 
   // 根據 provider 選擇預設模型
-  const defaultModel = provider === 'deepseek' ? 'deepseek-chat' : 'gpt-4o';
+  const defaultModel = provider === 'deepseek' ? 'deepseek-chat' : provider === 'ollama' ? 'llama3:latest' :  'gpt-4o';
   const model = task.options?.model ?? defaultModel;
 
   const runner = openai.beta.chat.completions

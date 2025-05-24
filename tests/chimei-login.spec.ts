@@ -8,9 +8,8 @@ test('登入奇美醫院系統', async ({ page }) => {
       "在 Username 欄位輸入 B30430，然後點擊登入按鈕", 
       { page },
       {
-        provider: 'deepseek',
-        model: 'deepseek-chat',
-
+        provider: 'ollama',
+        model: 'llama3:latest',
       }
     );
   });
