@@ -1,1 +1,12 @@
-[]
+[
+  {
+    "id": "1748059182226",
+    "timestamp": 1748059182226,
+    "path": "src/createActions.ts",
+    "content": "    locator_pressKey: {\r\n      function: async (args: { elementId: string; key: string }) => {\r\n        const { elementId, key } = args;\r\n        await getLocator(elementId).press(key);\r\n        return { success: true };\r\n      },\r\n      name: \"locator_pressKey\",\r\n      description: \"Presses a key while focused on the specified element.\",\r\n      parse: (args: string) => {\r\n        return z\r\n          .object({\r\n            elementId: z.string(),\r\n            key: z.string(),\r\n          })\r\n          .parse(JSON.parse(args));\r\n      },\r\n      parameters: {\r\n        type: \"object\",\r\n        properties: {\r\n          elementId: { type: \"string\" },\r\n          key: {\r\n            type: \"string\",\r\n            description:\r\n              \"The name of the key to press, e.g., 'Enter', 'ArrowUp', 'a'.\",\r\n          },\r\n        },\r\n      },\r\n    },",
+    "relativePath": "src/createActions.ts",
+    "description": "",
+    "lineCount": 28,
+    "lineStart": 15
+  }
+]
